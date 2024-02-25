@@ -8,7 +8,8 @@ import PauseIcon from "@mui/icons-material/Pause";
 import { Button, Slider } from "@mui/material";
 
 const AudioContainer = styled.div`
-  height: 4rem;
+  height: 100%;
+  bottom: 0;
   width: 100%;
   display: flex;
   justify-content: space-between;

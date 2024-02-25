@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AudioCard from "./AudioCard";
@@ -19,7 +21,7 @@ const Container = styled.div`
       margin: auto 0;
       width: auto;
     }
-    #dropDown{
+    #dropDown {
       border: 0;
       background-color: #3a3a3a;
       outline: 0;
@@ -77,6 +79,15 @@ const Container = styled.div`
   }
 `;
 
+const AudioContainer = styled.div`
+  /* style={{ width: "100%", height : "auto", position : "absolute", bottom : "0", bacl}} */
+  width: 100%;
+  height: 6rem;
+  position: absolute;
+  bottom: 0;
+  background-color: whitesmoke;
+`;
+
 const Table = ({ data, userData, userName }) => {
   const [filteredKeys, setFilteredKeys] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -89,7 +100,9 @@ const Table = ({ data, userData, userName }) => {
   const filterData = (key) => {
     setSearchKey(key);
     let newList = data.audioFiles.filter((item) => {
-      return typeof(item[headerKey])==="number" ? item[headerKey] == key.trim() : item[headerKey]?.toLowerCase().includes(key.trim().toLowerCase())
+      return typeof item[headerKey] === "number"
+        ? item[headerKey] == key.trim()
+        : item[headerKey]?.toLowerCase().includes(key.trim().toLowerCase());
     });
     if (key === "") newList = data.audioFiles;
     setSampleData(newList);
@@ -106,10 +119,7 @@ const Table = ({ data, userData, userName }) => {
   useEffect(() => {
     const jsonData = data.audioFiles.map((item) => {
       let obj = {};
-      filteredKeys.forEach((keyObj) => {
-        const key = Object.keys(keyObj)[0];
-        obj[key] = item[key];
-      });
+      obj["fileName"] = item.fileName;
       const comment = item.comments.find(
         (com) => com.userName === userData.userName
       );
@@ -136,11 +146,19 @@ const Table = ({ data, userData, userName }) => {
   return (
     <Container>
       <div className="userDashboardSearchDiv">
-        <select id="dropDown" onChange={(e)=>setHeaderKey(e.target.value)}>
+        <select
+          id="dropDown"
+          onChange={(e) => setHeaderKey(e.target.value)}>
           <option value="0">Select Field</option>
           {filteredKeys.map((item, index) => {
             const key = Object.keys(item)[0];
-            return <option value={key} key={index}>{item[key].nickName}</option>;
+            return (
+              <option
+                value={key}
+                key={index}>
+                {item[key].nickName}
+              </option>
+            );
           })}
         </select>
         <input
@@ -205,7 +223,7 @@ const Table = ({ data, userData, userName }) => {
           </div>
         ))}
       </div>
-      <div style={{ width: "100%", height : "4rem"}}>
+      <AudioContainer>
         {selectedProject === null ? (
           ""
         ) : new Date(data.deadline).toISOString() >=
@@ -216,9 +234,17 @@ const Table = ({ data, userData, userName }) => {
             projectLimit={limit}
           />
         ) : (
-          <div style={{ height: "4rem", display:"flex", justifyContent:"center", alignItems:"center"}}>Sorry, but this project has expired</div>
+          <div
+            style={{
+              height: "4rem",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            Sorry, but this project has expired
+          </div>
         )}
-      </div>
+      </AudioContainer>
     </Container>
   );
 };
